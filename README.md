@@ -1,6 +1,6 @@
 # Joker Box MiJia
 
-基于 [mijiaapi](https://mijia-api.do1e.com/) 和 FastAPI 的米家设备管理工具。提供浏览器管理页面和 HTTP API，使用 uv 管理依赖。
+基于 [mijiaapi](https://github.com/Do1e/mijia-api)（[使用文档](https://mijia-api.do1e.com/)）和 FastAPI 的米家设备管理工具。提供浏览器管理页面和 HTTP API，使用 uv 管理依赖。
 
 ## 功能
 
