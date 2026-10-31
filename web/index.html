@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Joker Box 米家设备管理">
+  <title>Joker Box · 米家设备</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Joker Box 米家设备首页">
+      <span class="brand-mark" aria-hidden="true">J</span>
+      <span>Joker Box</span>
+    </a>
+    <div class="topbar-actions">
+      <label id="home-picker" class="home-picker" hidden>
+        <span>家庭</span>
+        <select id="home-select" aria-label="选择家庭" disabled></select>
+      </label>
+      <button id="refresh-button" class="refresh-button" type="button" disabled hidden>
+        刷新状态
+      </button>
+      <button id="logout-button" class="logout-button" type="button" hidden>退出登录</button>
+    </div>
+  </header>
+
+  <main id="login-view" class="login-view">
+    <section class="login-panel" aria-labelledby="login-title">
+      <div class="login-copy">
+        <h1 id="login-title">连接米家</h1>
+        <p>使用米家 App 扫描二维码，并在手机上确认登录。</p>
+      </div>
+      <div id="qr-frame" class="qr-frame" hidden>
+        <img id="login-qr" alt="米家账号登录二维码" width="240" height="240">
+      </div>
+      <p id="login-status" class="login-status" role="status" aria-live="polite">正在检查登录状态…</p>
+      <button id="login-retry" class="control-button" type="button" hidden>重新获取二维码</button>
+      <p class="login-note">认证信息仅保存在本机，不会显示在网页中。</p>
+    </section>
+  </main>
+
+  <main id="workspace" class="workspace" hidden>
+    <aside class="room-panel" aria-label="房间导航">
+      <div class="room-panel-heading">
+        <p id="home-name">正在连接米家</p>
+        <span id="device-total"></span>
+      </div>
+      <nav id="room-list" class="room-list" aria-label="按房间筛选"></nav>
+      <p class="room-hint">房间信息来自米家家庭分组</p>
+    </aside>
+
+    <section class="device-panel" aria-labelledby="section-title">
+      <div class="device-heading">
+        <div>
+          <h1 id="section-title">全屋设备</h1>
+          <p id="section-summary">正在获取设备列表…</p>
+        </div>
+        <span id="last-updated" class="last-updated"></span>
+      </div>
+
+      <div id="status-filter" class="status-filter" role="group" aria-label="按在线状态筛选">
+        <button type="button" data-filter="online" class="active" aria-pressed="true">在线 <span id="online-count">0</span></button>
+        <button type="button" data-filter="offline" aria-pressed="false">离线 <span id="offline-count">0</span></button>
+        <button type="button" data-filter="all" aria-pressed="false">全部 <span id="all-count">0</span></button>
+      </div>
+
+      <div id="notice" class="notice" role="status" hidden></div>
+      <div id="loading" class="loading" role="status">
+        <span class="loading-line"></span>
+        <span class="loading-line"></span>
+        <span class="loading-line"></span>
+        <span class="sr-only">正在加载设备</span>
+      </div>
+      <div id="device-list" class="device-list" aria-live="polite"></div>
+      <div id="empty-state" class="empty-state" hidden>
+        <h2>这个房间还没有设备</h2>
+        <p>切换到全屋或其他房间查看。</p>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="device-dialog" class="device-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-header">
+      <div>
+        <p id="dialog-model" class="dialog-model"></p>
+        <h2 id="dialog-title">设备详情</h2>
+      </div>
+      <button id="dialog-close" class="dialog-close" type="button" aria-label="关闭设备详情">×</button>
+    </div>
+    <div id="dialog-content" class="dialog-content"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </dialog>
+
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

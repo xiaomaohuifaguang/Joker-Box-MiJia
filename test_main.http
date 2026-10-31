@@ -1,0 +1,54 @@
+@host = http://127.0.0.1:8000
+@homeId = 替换为家庭ID
+@did = 替换为设备DID
+
+### Web 管理页面
+GET {{host}}/
+
+### 健康检查
+GET {{host}}/api/health
+Accept: application/json
+
+### 检查认证状态
+GET {{host}}/api/auth/status
+Accept: application/json
+
+### 扫码登录第一步：获取二维码，使用响应中的 qr_url
+POST {{host}}/api/auth/qr-login
+
+### 扫码登录第二步：等待手机确认；仅在第一步后执行，可能长时间等待
+POST {{host}}/api/auth/qr-login/complete
+
+### 退出登录：会删除本地认证文件，需要重新扫码
+POST {{host}}/api/auth/logout
+
+### 家庭列表
+GET {{host}}/api/homes
+Accept: application/json
+
+### 房间列表
+GET {{host}}/api/homes/{{homeId}}/rooms
+Accept: application/json
+
+### 设备列表
+GET {{host}}/api/devices?home_id={{homeId}}
+Accept: application/json
+
+### 设备详情及动作参数定义
+GET {{host}}/api/devices/{{did}}
+Accept: application/json
+
+### 设置属性：会操作真实设备，请先确认 DID 和属性名
+PUT {{host}}/api/devices/{{did}}/properties/ir-temperature
+Content-Type: application/json
+
+{"value": 26}
+
+### 执行无参数动作：会操作真实设备
+POST {{host}}/api/devices/{{did}}/actions/turn-on
+
+### 执行带参数动作：参数顺序见设备详情
+POST {{host}}/api/devices/{{did}}/actions/play-text
+Content-Type: application/json
+
+{"values": ["你好"]}

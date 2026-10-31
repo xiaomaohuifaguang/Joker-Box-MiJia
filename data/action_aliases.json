@@ -1,0 +1,23 @@
+{
+  "turn-on": "开机",
+  "turn-off": "关机",
+  "toggle": "切换开关",
+  "fan-speed-up": "提高风速",
+  "fan-speed-down": "降低风速",
+  "temperature-up": "调高温度",
+  "temperature-down": "调低温度",
+  "play": "播放",
+  "pause": "暂停",
+  "next": "下一首",
+  "previous": "上一首",
+  "play-text": "朗读文本",
+  "execute-text-directive": "执行文本指令",
+  "seek": "调整播放进度",
+  "stop": "停止播放",
+  "stop-alarm": "停止闹钟",
+  "wake-up": "唤醒",
+  "play-radio": "播放电台",
+  "play-music": "播放音乐",
+  "tv-switchon": "打开电视",
+  "reboot": "重新启动"
+}
