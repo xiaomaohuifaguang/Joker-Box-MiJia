@@ -30,6 +30,9 @@ const elements = {
   onlineCount: document.querySelector("#online-count"),
   offlineCount: document.querySelector("#offline-count"),
   allCount: document.querySelector("#all-count"),
+  metricTotal: document.querySelector("#metric-total"),
+  metricOnline: document.querySelector("#metric-online"),
+  metricOffline: document.querySelector("#metric-offline"),
   sectionTitle: document.querySelector("#section-title"),
   sectionSummary: document.querySelector("#section-summary"),
   lastUpdated: document.querySelector("#last-updated"),
@@ -232,6 +235,11 @@ function renderDevices() {
   const onlineCount = roomDevices.filter((device) => device.online === true).length;
   const offlineCount = roomDevices.filter((device) => device.online === false).length;
   const unknownCount = roomDevices.length - onlineCount - offlineCount;
+  const homeOnlineCount = state.devices.filter((device) => device.online === true).length;
+  const homeOfflineCount = state.devices.filter((device) => device.online === false).length;
+  elements.metricTotal.textContent = state.devices.length;
+  elements.metricOnline.textContent = homeOnlineCount;
+  elements.metricOffline.textContent = homeOfflineCount;
   elements.onlineCount.textContent = onlineCount;
   elements.offlineCount.textContent = offlineCount;
   elements.allCount.textContent = roomDevices.length;

@@ -11,7 +11,7 @@
   <header class="topbar">
     <a class="brand" href="/" aria-label="Joker Box 米家设备首页">
       <span class="brand-mark" aria-hidden="true">J</span>
-      <span>Joker Box</span>
+      <span class="brand-copy"><strong>Joker Box</strong><small>米家设备管理</small></span>
     </a>
     <div class="topbar-actions">
       <label id="home-picker" class="home-picker" hidden>
@@ -19,7 +19,7 @@
         <select id="home-select" aria-label="选择家庭" disabled></select>
       </label>
       <button id="refresh-button" class="refresh-button" type="button" disabled hidden>
-        刷新状态
+        <span class="refresh-icon" aria-hidden="true">↻</span>刷新状态
       </button>
       <button id="logout-button" class="logout-button" type="button" hidden>退出登录</button>
     </div>
@@ -28,41 +28,86 @@
   <main id="login-view" class="login-view">
     <section class="login-panel" aria-labelledby="login-title">
       <div class="login-copy">
-        <h1 id="login-title">连接米家</h1>
-        <p>使用米家 App 扫描二维码，并在手机上确认登录。</p>
+        <span class="eyebrow"><span class="eyebrow-dot"></span>本地设备控制台</span>
+        <h1 id="login-title">连接你的<br>米家家庭</h1>
+        <p>登录后即可查看家庭、房间和设备状态，并从浏览器管理支持的设备。</p>
+        <div class="login-steps" aria-label="登录步骤">
+          <span><b>01</b>打开米家 App</span>
+          <span><b>02</b>扫描二维码</span>
+          <span><b>03</b>确认登录</span>
+        </div>
       </div>
-      <div id="qr-frame" class="qr-frame" hidden>
-        <img id="login-qr" alt="米家账号登录二维码" width="240" height="240">
+      <div class="login-card">
+        <div class="login-card-heading">
+          <span class="login-card-icon" aria-hidden="true">⌗</span>
+          <div><strong>扫码登录</strong><small>使用米家 App 扫描下方二维码</small></div>
+        </div>
+        <div id="qr-frame" class="qr-frame" hidden>
+          <img id="login-qr" alt="米家账号登录二维码" width="240" height="240">
+        </div>
+        <p id="login-status" class="login-status" role="status" aria-live="polite">正在检查登录状态…</p>
+        <button id="login-retry" class="control-button" type="button" hidden>重新获取二维码</button>
+        <p class="login-note"><span aria-hidden="true">▣</span> 认证信息仅保存在本机，不会显示在网页中。</p>
       </div>
-      <p id="login-status" class="login-status" role="status" aria-live="polite">正在检查登录状态…</p>
-      <button id="login-retry" class="control-button" type="button" hidden>重新获取二维码</button>
-      <p class="login-note">认证信息仅保存在本机，不会显示在网页中。</p>
     </section>
   </main>
 
   <main id="workspace" class="workspace" hidden>
     <aside class="room-panel" aria-label="房间导航">
       <div class="room-panel-heading">
+        <span class="side-eyebrow">当前家庭</span>
         <p id="home-name">正在连接米家</p>
-        <span id="device-total"></span>
+        <span id="device-total" class="home-device-total"></span>
       </div>
+      <div class="room-nav-label"><span>房间</span><span class="room-nav-rule"></span></div>
       <nav id="room-list" class="room-list" aria-label="按房间筛选"></nav>
-      <p class="room-hint">房间信息来自米家家庭分组</p>
+      <div class="room-panel-footer">
+        <span class="local-indicator"></span>
+        <span>本地管理</span>
+        <span class="room-hint">房间分组来自米家</span>
+      </div>
     </aside>
 
     <section class="device-panel" aria-labelledby="section-title">
+      <section class="overview-strip" aria-label="家庭设备概况">
+        <div class="overview-heading">
+          <span class="eyebrow">设备概况</span>
+          <p>家庭状态</p>
+        </div>
+        <div class="overview-stat">
+          <span class="overview-stat-label">全部设备</span>
+          <strong id="metric-total">0</strong>
+          <span>台</span>
+        </div>
+        <div class="overview-stat is-online">
+          <span class="overview-stat-label">在线</span>
+          <strong id="metric-online">0</strong>
+          <span>台</span>
+        </div>
+        <div class="overview-stat is-offline">
+          <span class="overview-stat-label">离线</span>
+          <strong id="metric-offline">0</strong>
+          <span>台</span>
+        </div>
+        <span class="overview-mark" aria-hidden="true">JB<span>/</span>01</span>
+      </section>
+
       <div class="device-heading">
         <div>
+          <span class="eyebrow section-eyebrow">设备清单</span>
           <h1 id="section-title">全屋设备</h1>
           <p id="section-summary">正在获取设备列表…</p>
         </div>
         <span id="last-updated" class="last-updated"></span>
       </div>
 
-      <div id="status-filter" class="status-filter" role="group" aria-label="按在线状态筛选">
-        <button type="button" data-filter="online" class="active" aria-pressed="true">在线 <span id="online-count">0</span></button>
-        <button type="button" data-filter="offline" aria-pressed="false">离线 <span id="offline-count">0</span></button>
-        <button type="button" data-filter="all" aria-pressed="false">全部 <span id="all-count">0</span></button>
+      <div class="list-toolbar">
+        <div id="status-filter" class="status-filter" role="group" aria-label="按在线状态筛选">
+          <button type="button" data-filter="online" class="active" aria-pressed="true">在线 <span id="online-count">0</span></button>
+          <button type="button" data-filter="offline" aria-pressed="false">离线 <span id="offline-count">0</span></button>
+          <button type="button" data-filter="all" aria-pressed="false">全部 <span id="all-count">0</span></button>
+        </div>
+        <span class="list-hint">选择设备查看详情与控制项 <span aria-hidden="true">↗</span></span>
       </div>
 
       <div id="notice" class="notice" role="status" hidden></div>
@@ -74,9 +119,11 @@
       </div>
       <div id="device-list" class="device-list" aria-live="polite"></div>
       <div id="empty-state" class="empty-state" hidden>
+        <span class="empty-mark" aria-hidden="true">—</span>
         <h2>这个房间还没有设备</h2>
         <p>切换到全屋或其他房间查看。</p>
       </div>
+      <footer class="workspace-footer"><span>JOKER BOX</span><span>米家设备管理 · 本地运行</span></footer>
     </section>
   </main>
 
