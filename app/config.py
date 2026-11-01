@@ -6,6 +6,8 @@ from pathlib import Path
 DEFAULT_AUTH_DATA_PATH = Path("data/auth.json")
 DEFAULT_DEVICE_ALIASES_PATH = Path("data/device_aliases.json")
 DEFAULT_ACTION_ALIASES_PATH = Path("data/action_aliases.json")
+DEFAULT_SERVER_HOST = "127.0.0.1"
+DEFAULT_SERVER_PORT = 10253
 
 
 def resolve_auth_data_path(cli_path: str | None = None) -> Path:
@@ -25,3 +27,22 @@ def resolve_action_aliases_path() -> Path:
     configured_path = os.getenv("MIJIA_ACTION_ALIASES_PATH")
     path = Path(configured_path) if configured_path else DEFAULT_ACTION_ALIASES_PATH
     return path.expanduser().resolve()
+
+
+def resolve_server_host() -> str:
+    """监听地址；uvicorn 命令行 --host 优先，其次 MIJIA_HOST 环境变量。"""
+    return os.getenv("MIJIA_HOST") or DEFAULT_SERVER_HOST
+
+
+def resolve_server_port() -> int:
+    """监听端口；uvicorn 命令行 --port 优先，其次 MIJIA_PORT 环境变量。"""
+    raw = os.getenv("MIJIA_PORT")
+    if not raw:
+        return DEFAULT_SERVER_PORT
+    try:
+        port = int(raw)
+    except ValueError as exc:
+        raise ValueError(f"MIJIA_PORT 必须是整数，当前值: {raw!r}") from exc
+    if not 1 <= port <= 65535:
+        raise ValueError(f"MIJIA_PORT 必须在 1-65535 之间，当前值: {port}")
+    return port

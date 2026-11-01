@@ -35,13 +35,15 @@ uv sync
 MIJIA_AUTH_DATA_PATH=data/auth.json
 MIJIA_DEVICE_ALIASES_PATH=data/device_aliases.json
 MIJIA_ACTION_ALIASES_PATH=data/action_aliases.json
+MIJIA_HOST=127.0.0.1
+MIJIA_PORT=10253
 ```
 
 相对路径以项目目录为基准。`.env`、认证文件和设备别名不会提交到 Git；通用动作别名 `data/action_aliases.json` 可以纳入版本管理。
 
 ## 登录米家
 
-启动服务后打开 http://127.0.0.1:8000/ 。没有认证文件或 Token 失效时，页面会自动显示二维码；使用米家 App 扫码并确认后，页面会自动加载设备。浏览器只接收二维码地址和登录状态，认证文件内容由 SDK 直接保存在本机。
+启动服务后打开 http://127.0.0.1:10253/ 。没有认证文件或 Token 失效时，页面会自动显示二维码；使用米家 App 扫码并确认后，页面会自动加载设备。浏览器只接收二维码地址和登录状态，认证文件内容由 SDK 直接保存在本机。
 
 也可以在终端扫码登录：
 
@@ -76,14 +78,18 @@ uv run python -m cli.auth --auth-data-path "C:/path/to/mijia/auth.json" login
 ## 启动
 
 ```bash
-uv run --env-file .env uvicorn main:app --host 127.0.0.1 --port 8000
+uv run --env-file .env python main.py
 ```
 
-- Web 管理页面：http://127.0.0.1:8000/
-- Swagger：http://127.0.0.1:8000/docs
-- OpenAPI：http://127.0.0.1:8000/openapi.json
+使用 `.env` 中的 `MIJIA_HOST`/`MIJIA_PORT`（默认 `127.0.0.1:10253`）；`.env` 中设置 `MIJIA_RELOAD=true` 可开启开发热重载。
 
-当前接口没有访问认证，默认仅监听本机。不要直接通过 `0.0.0.0` 或公网暴露控制接口。
+- Web 管理页面：http://127.0.0.1:10253/
+- Swagger：http://127.0.0.1:10253/docs
+- OpenAPI：http://127.0.0.1:10253/openapi.json
+
+注意：`uv run --env-file .env uvicorn main:app` 不会读取 `MIJIA_HOST`/`MIJIA_PORT`，因为 uvicorn 命令行自带默认 `--host 127.0.0.1 --port 8000`。如果一定要用 uvicorn 命令行，需要显式传参：`uv run --env-file .env uvicorn main:app --host 127.0.0.1 --port 10253`。
+
+当前接口没有访问认证，默认仅监听本机；不要直接通过 `0.0.0.0` 或公网暴露控制接口。
 
 ## 命令行验证工具
 
@@ -128,8 +134,8 @@ uv run --env-file .env python -m cli.control --did "设备DID" --action turn-off
 ### 查询设备
 
 ```bash
-curl "http://127.0.0.1:8000/api/devices?home_id=家庭ID"
-curl "http://127.0.0.1:8000/api/devices/设备DID"
+curl "http://127.0.0.1:10253/api/devices?home_id=家庭ID"
+curl "http://127.0.0.1:10253/api/devices/设备DID"
 ```
 
 设备详情中的 `properties` 包含属性读写权限、范围、枚举值和当前值；`actions[].parameters` 按顺序描述动作输入参数。`parameters: null` 表示规格不可用，可在 Web 中使用该动作的 JSON 备用输入。
@@ -137,7 +143,7 @@ curl "http://127.0.0.1:8000/api/devices/设备DID"
 ### 设置属性
 
 ```bash
-curl -X PUT "http://127.0.0.1:8000/api/devices/设备DID/properties/ir-temperature" \
+curl -X PUT "http://127.0.0.1:10253/api/devices/设备DID/properties/ir-temperature" \
   -H "Content-Type: application/json" \
   -d '{"value": 26}'
 ```
@@ -145,13 +151,13 @@ curl -X PUT "http://127.0.0.1:8000/api/devices/设备DID/properties/ir-temperatu
 ### 执行无参数动作
 
 ```bash
-curl -X POST "http://127.0.0.1:8000/api/devices/设备DID/actions/turn-on"
+curl -X POST "http://127.0.0.1:10253/api/devices/设备DID/actions/turn-on"
 ```
 
 ### 执行带参数动作
 
 ```bash
-curl -X POST "http://127.0.0.1:8000/api/devices/设备DID/actions/play-text" \
+curl -X POST "http://127.0.0.1:10253/api/devices/设备DID/actions/play-text" \
   -H "Content-Type: application/json" \
   -d '{"values": ["你好"]}'
 ```

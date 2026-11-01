@@ -8,6 +8,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from mijiaAPI.errors import DeviceNotFoundError
 
+from app.config import resolve_server_host, resolve_server_port
 from app.mijia_service import (
     DeviceOperationError,
     HomeNotFoundError,
@@ -165,3 +166,18 @@ def run_device_action(
 ) -> dict:
     values = payload.values if payload is not None else None
     return service.run_action(did, action_name, values)
+
+
+if __name__ == "__main__":
+    # uvicorn 命令行参数优先；直接 `python main.py` 时使用环境变量/默认值。
+    # 使用模块名字符串而非 app 对象，reload 才能生效。
+    import os
+
+    import uvicorn
+
+    uvicorn.run(
+        "main:app",
+        host=resolve_server_host(),
+        port=resolve_server_port(),
+        reload=os.getenv("MIJIA_RELOAD", "").lower() in ("1", "true", "yes"),
+    )
